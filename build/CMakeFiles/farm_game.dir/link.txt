@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/farm_game.dir/main.cpp.o CMakeFiles/farm_game.dir/src/farm.cpp.o CMakeFiles/farm_game.dir/src/farm_printer.cpp.o -o farm_game
