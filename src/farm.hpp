@@ -76,6 +76,11 @@ public:
             grid[r][c] = '.';
             std::cout << "You harvested a mature carrot!\n";
         }
+        if (grid[r][c] == 'F') //redo this for all new plants
+        {
+            grid[r][c] = '.';
+            std::cout << "You harvested a some plant carrot!\n";
+        }
         else
         {
             std::cout << "There's nothing to harvest here.\n";

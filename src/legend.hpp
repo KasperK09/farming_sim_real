@@ -10,7 +10,8 @@ public:
                   << "Use WASD to move\n"
                   << "Player is '@'\n"
                   << "Carrots are 'v' (seedlings)\n"
-                  << "Mature Carrots are 'V' (mature)\n"
+                  << "Mature Carrots are 'V' (mature)\n" 
+                  //add all of the new plants here maybe change this to have line by line
                   << "Press C to plant a carrot\n"
                   << "Press H to harvest a mature carrot\n"
                   << "Day ends when you move 10 steps\n"
