@@ -1,1 +1,0 @@
-/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/farm_test.dir/tests/farm_test.cpp.o CMakeFiles/farm_test.dir/src/farm.cpp.o CMakeFiles/farm_test.dir/src/farm_printer.cpp.o -o farm_test  _deps/catch2-build/src/libCatch2Main.a _deps/catch2-build/src/libCatch2.a
