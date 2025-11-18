@@ -35,14 +35,14 @@ public:
 
         if (grid[r][c] == '.')
         {
-            grid[r][c] = 'v';
-            std::cout << "You planted a seedling!\n";
+            grid[r][c] = 'c';
+            std::cout << "You planted a seedling! carrot\n";
         }
-        else if (grid[r][c] == 'v')
+        else if (grid[r][c] == 'c' || 'l')
         {
             std::cout << "There's already a seedling here!\n";
         }
-        else if (grid[r][c] == 'V')
+        else if (grid[r][c] == 'C' || 'L')
         {
             std::cout << "You can’t plant on a mature crop! Harvest it first.\n";
         }
@@ -51,6 +51,31 @@ public:
             std::cout << "You can’t plant here!\n";
         }
     }
+
+    void plant_lettuce(const Player &player)
+    {
+        int r = player.get_row();
+        int c = player.get_column();
+
+        if (grid[r][c] == '.')
+        {
+            grid[r][c] = 'l';
+            std::cout << "You planted a seedling!\n";
+        }
+        else if (grid[r][c] == 'c' || 'l')
+        {
+            std::cout << "There's already a seedling here!\n";
+        }
+        else if (grid[r][c] == 'C' || 'L')
+        {
+            std::cout << "You can’t plant on a mature crop! Harvest it first.\n";
+        }
+        else
+        {
+            std::cout << "You can’t plant here!\n";
+        }
+    }
+
 
     void grow_crops()
     {
@@ -76,10 +101,10 @@ public:
             grid[r][c] = '.';
             std::cout << "You harvested a mature carrot!\n";
         }
-        if (grid[r][c] == 'F') //redo this for all new plants
+        if (grid[r][c] == 'L') //redo this for all new plants
         {
             grid[r][c] = '.';
-            std::cout << "You harvested a some plant carrot!\n";
+            std::cout << "You harvested a mature lettuce!\n";
         }
         else
         {
