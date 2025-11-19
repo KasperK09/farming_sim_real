@@ -83,9 +83,9 @@ public:
         {
             for (int j = 0; j < columns; ++j)
             {
-                if (grid[i][j] == 'v')
+                if (grid[i][j] == 'c')
                 {
-                    grid[i][j] = 'V';
+                    grid[i][j] = 'C';
                 }
             }
         }
@@ -96,7 +96,7 @@ public:
         int r = player.get_row();
         int c = player.get_column();
 
-        if (grid[r][c] == 'V')
+        if (grid[r][c] == 'C')
         {
             grid[r][c] = '.';
             std::cout << "You harvested a mature carrot!\n";
