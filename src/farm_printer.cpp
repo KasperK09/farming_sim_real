@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "farm_printer.hpp"
+#include "ansi_clear.hpp"   // <-- add this include
 
 void FarmPrinter::print_static(int rows, int columns)
 {
@@ -16,6 +17,8 @@ void FarmPrinter::print_static(int rows, int columns)
 
 void FarmPrinter::print(const Farm &farm, const Player &player)
 {
+    clear_screen();
+
     int rows = farm.get_rows();
     int columns = farm.get_columns();
     const auto& grid = farm.get_grid();

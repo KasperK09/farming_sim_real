@@ -1,37 +1,78 @@
 #pragma once
 #include <iostream>
+#include <string>
+
+#include "ansi_clear.hpp"
 
 class Legend
 {
 public:
     static void show_legend()
     {
+        std::string pause;
 
-        //change this legend system because people don't read it and then don't know how the day ends
+        std::cout << "\n===== FARMING SIMULATOR =====\n\n";
+        std::cout << "Welcome to your farm!\n";
+        std::cout << "You will plant crops, water them, and harvest them.\n\n";
+        std::cout << "Press ENTER to continue...";
+        std::getline(std::cin, pause);
 
-        //maybe make a tutorial game mode at the start so if they want to play the tutorial they can but they don't want to they can just go into the full game.
+        std::cout << "\n*** IMPORTANT GAME RULES ***\n"
+                  << "• A DAY ENDS AFTER 10 MOVES.\n"
+                  << "• Crops grow +1 stage per day.\n"
+                  << "• You may water ONE plant per day for +1 extra growth.\n\n";
+        std::cout << "Press ENTER to continue...";
+        std::getline(std::cin, pause);
 
-        std::cout << "\nWelcome to the Farming Simulator Program!\n"
-                  << "\n*** IMPORTANT ***\n"
-                  << "A DAY ENDS AFTER 10 MOVES.\n"
-                  << "--------------------------\n\n"
-                  << "Use WASD to move\n"
-                  << "Player is '@'\n"
-                  << "Carrots are 'c' (seedlings)\n"
-                  << "Mature Carrots are 'C' (mature)\n\n" 
+        std::cout << "\n=== CONTROLS ===\n"
+                  << "Move: W A S D\n"
+                  << "Plant Carrot: C\n"
+                  << "Plant Lettuce: L\n"
+                  << "Plant Spinach: E\n"
+                  << "Plant Beet: B\n"
+                  << "Plant Brussel Sprouts: P\n"
+                  << "Harvest Mature Crops: H\n"
+                  << "Water a Plant: R\n"
+                  << "Quit Game: Q\n\n"
+                  << "Player character is: '@'\n\n";
+        std::cout << "Press ENTER to continue...";
+        std::getline(std::cin, pause);
 
-                  << "(below plants haven't been added yet)\n\n"
+        std::cout << "\n=== PLANT GROWTH ===\n"
+                  << "Seeds use unique tilled-soil symbols:\n"
+                  << "Carrot: '#' → 'c' → 'C'\n"
+                  << "Lettuce: '%' → 'l' → 'L'\n"
+                  << "Spinach: '*' → 'e' → 'E'\n"
+                  << "Beet: '&' → 'b' → 'B'\n"
+                  << "Brussel Sprouts: '?' → 'p' → 'P'\n\n"
 
-                  << "Lettuce are l\n"
-                  << "Mature Lettuce are L\n"
-                  << "Spinach are s\n"
-                  << "Mature Spinach are S\n"
-                  << "Beet are b\n"
-                  << "Mature beet are B\n"
-                  << "Brussel Sprouts are p\n"
-                  << "Mature Brussel Sprouts are P\n"
-                  << "Press Corresponding plant symbol to plant\n"
-                  << "Press H to harvest a mature carrot\n"
-                  << "Press q to quit the game\n\n";
+                  << "Days to sprout:\n"
+                  << "• Carrot = 1\n"
+                  << "• Lettuce = 2\n"
+                  << "• Spinach = 2\n"
+                  << "• Beet = 2\n"
+                  << "• Brussel Sprouts = 5\n\n"
+
+                  << "Days from sprout to mature:\n"
+                  << "• Carrot = 1\n"
+                  << "• Lettuce = 2\n"
+                  << "• Spinach = 3\n"
+                  << "• Beet = 5\n"
+                  << "• Brussel Sprouts = 10\n\n";
+        std::cout << "Press ENTER to continue...";
+        std::getline(std::cin, pause);
+
+        std::cout << "\n=== WATERING ===\n"
+                  << "• You may water ONE plant per day.\n"
+                  << "• Watering instantly gives +1 growth.\n"
+                  << "• You must stand on the plant to water it.\n\n";
+        std::cout << "Press ENTER to continue...";
+        std::getline(std::cin, pause);
+
+        std::cout << "\n=== FINAL NOTES ===\n"
+                  << "'.' = empty land\n"
+                  << "Manage your moves, watering, and planting to grow crops efficiently!\n\n";
+        std::cout << "Press ENTER to start the game...";
+        std::getline(std::cin, pause);
     }
 };

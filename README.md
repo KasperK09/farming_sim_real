@@ -37,6 +37,3 @@ Benchmarking is provided with Catch2. You can write benchmarking assertions alon
 [catch2]: https://github.com/catchorg/Catch2
 [cmake]: https://cmake.org/
 =======
-# farming_sim_real
-farming_sim_real is my actual new repsoitory for farming_sim project because the branches in the prevoius commits are werid
->>>>>>> f7532452c2540538a99a0c8c560c36b3a71f0715
