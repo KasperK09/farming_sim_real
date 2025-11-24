@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "farm_printer.hpp"
-#include "ansi_clear.hpp"   // <-- add this include
+#include "ansi_clear.hpp"
 
 void FarmPrinter::print_static(int rows, int columns)
 {
@@ -14,6 +14,8 @@ void FarmPrinter::print_static(int rows, int columns)
         std::cout << '\n';
     }
 }
+
+
 
 void FarmPrinter::print(const Farm &farm, const Player &player)
 {
@@ -34,4 +36,6 @@ void FarmPrinter::print(const Farm &farm, const Player &player)
         }
         std::cout << "\n";
     }
+    std::cout << "\n";
+    player.get_inventory().print();
 }

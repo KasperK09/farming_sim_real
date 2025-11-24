@@ -14,6 +14,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
+#game
 add_executable(farm_game
     main.cpp
     src/farm.cpp
@@ -22,8 +23,18 @@ add_executable(farm_game
 
 target_include_directories(farm_game PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
+#tests
 add_executable(farm_test
     tests/farm_test.cpp
+    tests/player_test.cpp
+    tests/farm_printer_test.cpp
+    tests/veg_carrot_test.cpp
+    tests/veg_lettuce_test.cpp
+    tests/veg_spinach_test.cpp
+    tests/veg_beet_test.cpp
+    tests/veg_brussel_sprouts_test.cpp
+    tests/farm_watering_test.cpp
+
     src/farm.cpp
     src/farm_printer.cpp
 )

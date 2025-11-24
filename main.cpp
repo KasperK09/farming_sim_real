@@ -44,8 +44,22 @@ int main()
         switch (input)
         {
             case 'q': case 'Q':
+            {
                 running = false;
+
+                int score = player.get_inventory().get_score();
+                std::cout << "\n===== FINAL SCORE DAY"<< day << " =====\n";
+                std::cout << "Carrot (20 each)\n";
+                std::cout << "Lettuce (40 each)\n";
+                std::cout << "Spinach (50 each)\n";
+                std::cout << "Beet (70 each)\n";
+                std::cout << "Brussels Sprouts (150 each)\n\n";
+                std::cout << "Your total score: " << score << "\n";
+                std::cout << "=======================\n\n";
+                std::cout << "THANKS FOR PLAYING!\n\n";
+
                 break;
+            }
 
 
             case 'c': case 'C':

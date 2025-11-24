@@ -1,44 +1,75 @@
 #include <catch2/catch_test_macros.hpp>
-#include <catch2/benchmark/catch_benchmark.hpp>
-#include <catch2/benchmark/catch_constructor.hpp>
-#include <catch2/generators/catch_generators_range.hpp>
-
-#include "../src/farm_printer.hpp"
 #include "../src/farm.hpp"
 #include "../src/player.hpp"
 
-TEST_CASE("farm printer runs with correct dimensions, ensure parameters are valid before printing, Prints to console for visual confirmation")
+TEST_CASE("Player movement stays inside farm grid")
 {
-    int rows = 2;
-    int cols = 3;
+    Farm farm(5, 7);
+    Player p;
 
-    REQUIRE(rows > 0);
-    REQUIRE(cols > 0);
+    p.set_position(0, 0);
 
-    FarmPrinter::print_static(rows, cols);
+    p.move('w', farm.get_rows(), farm.get_columns());
+    REQUIRE(p.get_row() == 0);
+
+    p.move('a', farm.get_rows(), farm.get_columns());
+    REQUIRE(p.get_column() == 0);
+
+    p.set_position(4, 6); 
+
+    p.move('s', farm.get_rows(), farm.get_columns());
+    REQUIRE(p.get_row() == 4);
+
+    p.move('d', farm.get_rows(), farm.get_columns());
+    REQUIRE(p.get_column() == 6);
 }
 
-TEST_CASE("farm printer prints with player at (0,0), verify initial logical state before print, prints to console")
-{
-    Farm farm(2, 3);
-    Player player;
-
-    REQUIRE(farm.get_rows() == 2);
-    REQUIRE(farm.get_columns() == 3);
-    REQUIRE(player.get_row() == 0);
-    REQUIRE(player.get_column() == 0);
-
-    FarmPrinter::print(farm, player);
-}
-
-TEST_CASE("farm printer prints player at correct postion, prints to console for visual check")
+TEST_CASE("Planting places tilled soil in grid for carrot")
 {
     Farm farm(3, 3);
-    Player player;
-    player.set_position(1, 2);
+    Player p;
+    p.set_position(1, 1);
 
-    REQUIRE(player.get_row() == 1);
-    REQUIRE(player.get_column() == 2);
+    farm.plant_carrot(p);
+    REQUIRE(farm.get_grid()[1][1] == '#');
+}
 
-    FarmPrinter::print(farm, player);
+TEST_CASE("Planting places tilled soil in grid for lettuce")
+{
+    Farm farm(3, 3);
+    Player p;
+    p.set_position(1, 1);
+
+    farm.plant_lettuce(p);
+    REQUIRE(farm.get_grid()[1][1] == '%');
+}
+
+TEST_CASE("Planting places tilled soil in grid for spinach")
+{
+    Farm farm(3, 3);
+    Player p;
+    p.set_position(1, 1);
+
+    farm.plant_spinach(p);
+    REQUIRE(farm.get_grid()[1][1] == '*');
+}
+
+TEST_CASE("Planting places tilled soil in grid for beet")
+{
+    Farm farm(3, 3);
+    Player p;
+    p.set_position(1, 1);
+
+    farm.plant_beet(p);
+    REQUIRE(farm.get_grid()[1][1] == '&');
+}
+
+TEST_CASE("Planting places tilled soil in grid for brussel sprouts")
+{
+    Farm farm(3, 3);
+    Player p;
+    p.set_position(1, 1);
+
+    farm.plant_brussel_sprouts(p);
+    REQUIRE(farm.get_grid()[1][1] == '?');
 }

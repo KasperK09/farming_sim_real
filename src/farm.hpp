@@ -5,6 +5,7 @@
 
 #include "player.hpp"
 #include "ansi_clear.hpp"
+#include "inventory.hpp"
 
 
 class Farm
@@ -26,25 +27,25 @@ public:
     int get_columns() const { return columns; }
     const std::vector<std::vector<char>>& get_grid() const { return grid; }
 
-    bool is_seed(char t)
+    bool is_tilled_soil(char tile) //tiled soil symbols
     {
-        return t=='#' || t=='%' || t=='*' || t=='&' || t=='?';
+        return tile=='#' || tile=='%' || tile=='*' || tile=='&' || tile=='?';
     }
 
-    bool is_sprout(char t)
+    bool is_sprout(char tile) //sprout symbols
     {
-        return t=='c' || t=='l' || t=='e' || t=='b' || t=='p';
+        return tile=='c' || tile=='l' || tile=='e' || tile=='b' || tile=='p';
     }
 
-    bool is_mature(char t)
+    bool is_mature(char tile) //mature symbols
     {
-        return t=='C' || t=='L' || t=='E' || t=='B' || t=='P';
+        return tile=='C' || tile=='L' || tile=='E' || tile=='B' || tile=='P';
     }
 
-    void plant(const Player& p, char seedSymbol, const std::string& name)
+    void plant(const Player& player, char seed_symbol, const std::string& name)
     {
-        int r = p.get_row();
-        int c = p.get_column();
+        int r = player.get_row();
+        int c = player.get_column();
 
         if (grid[r][c] != '.')
         {
@@ -52,35 +53,35 @@ public:
             return;
         }
 
-        grid[r][c] = seedSymbol;
+        grid[r][c] = seed_symbol;
         growth[r][c] = 0;
 
         std::cout << "You planted " << name << "\n";
     }
 
-    void plant_carrot(const Player& p)
+    void plant_carrot(const Player& player)
     {
-        plant(p, '#', "carrot");
+        plant(player, '#', "carrot");
     }
 
-    void plant_lettuce(const Player& p) 
+    void plant_lettuce(const Player& player) 
     {
-        plant(p, '%', "lettuce");
+        plant(player, '%', "lettuce");
     }
 
-    void plant_spinach(const Player& p) 
+    void plant_spinach(const Player& player) 
     {
-        plant(p, '*', "spinach");
+        plant(player, '*', "spinach");
     }
 
-    void plant_beet(const Player& p) 
+    void plant_beet(const Player& player) 
     {
-        plant(p, '&', "beet");
+        plant(player, '&', "beet");
     }
 
-    void plant_brussel_sprouts(const Player& p) 
+    void plant_brussel_sprouts(const Player& player) 
     {
-        plant(p, '?', "brussel sprouts");
+        plant(player, '?', "brussel sprouts");
     }
 
     int days_to_sprout(char seed)
@@ -131,15 +132,15 @@ public:
         return '?';
     }
 
-    void water_crop(const Player& p)
+    void water_crop(const Player& player)
     {
         if (hasWateredToday) {
             std::cout << "You already watered a plant today!\n";
             return;
         }
 
-        int r = p.get_row();
-        int c = p.get_column();
+        int r = player.get_row();
+        int c = player.get_column();
 
         char tile = grid[r][c];
 
@@ -169,7 +170,7 @@ public:
 
                 growth[r][c]++;
 
-                if (is_seed(tile))
+                if (is_tilled_soil(tile))
                 {
                     if (growth[r][c] >= days_to_sprout(tile)) {
                         tile = sprout_symbol(tile);
@@ -186,39 +187,45 @@ public:
         }
     }
 
-    void harvest_crop(Player& p)
+    void harvest_crop(Player& player)
     {
-        int r = p.get_row();
-        int c = p.get_column();
+        int r = player.get_row();
+        int c = player.get_column();
 
         char& tile = grid[r][c];
 
     switch (tile)
-    {
-        case 'C':
-            std::cout << "You harvested a carrot!\n";
-            break;
+{
+    case 'C':
+        std::cout << "You harvested a carrot!\n";
+        player.get_inventory().add_carrot();      // <-- new
+        break;
 
-        case 'L':
-            std::cout << "You harvested lettuce!\n";
-            break;
+    case 'L':
+        std::cout << "You harvested lettuce!\n";
+        player.get_inventory().add_lettuce();     // <-- new
+        break;
 
-        case 'E':
-            std::cout << "You harvested spinach!\n";
-            break;
+    case 'E':
+        std::cout << "You harvested spinach!\n";
+        player.get_inventory().add_spinach();     // <-- new
+        break;
 
-        case 'B':
-            std::cout << "You harvested a beet!\n";
-            break;
+    case 'B':
+        std::cout << "You harvested a beet!\n";
+        player.get_inventory().add_beet();        // <-- new
+        break;
 
-        case 'P':
-            std::cout << "You harvested brussel sprouts!\n";
-            break;
+    case 'P':
+        std::cout << "You harvested brussel sprouts!\n";
+        player.get_inventory().add_brussels();    // <-- new
+        break;
 
-        default:
-            std::cout << "Nothing to harvest.\n";
-            return;
-    }
+    default:
+        std::cout << "Nothing to harvest.\n";
+        return;
+}
+
 
 
         grid[r][c] = '.';

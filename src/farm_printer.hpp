@@ -6,6 +6,6 @@
 class FarmPrinter
 {
 public:
-    static void print_static(int rows = 5, int columns = 7);
+    static void print_static(int rows = 5, int columns = 7); //size of farm
     static void print(const Farm& farm, const Player& player);
 };

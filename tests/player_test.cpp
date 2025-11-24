@@ -12,52 +12,32 @@ TEST_CASE("checks to see that player starts on (0,0)") {
     REQUIRE(p.get_column() == 0);
 }
 
-TEST_CASE("checks if player moves correctly within bounds") {
+TEST_CASE("checks if player moves correctly with lowercase wasd") {
     Player p;
     int max_rows = 5;
     int max_columns = 5;
 
-    SECTION("Move down 's' increases row") {
+    SECTION("checks if player down move up with s") {
         p.move('s', max_rows, max_columns);
         REQUIRE(p.get_row() == 1);
         REQUIRE(p.get_column() == 0);
     }
 
-    SECTION("Move right 'd' increases column") {
+    SECTION("checks if player can right up with d") {
         p.move('d', max_rows, max_columns);
         REQUIRE(p.get_row() == 0);
         REQUIRE(p.get_column() == 1);
     }
 
-    SECTION("Move up 'w' decreases row but stays >= 0") {
+    SECTION("checks if player can move up with w and stays inbounds") {
         p.move('w', max_rows, max_columns);
         REQUIRE(p.get_row() == 0);
     }
 
-    SECTION("Move left 'a' decreases column but stays >= 0") {
+    SECTION("checks if player can move left with a and stays inbounds") {
         p.move('a', max_rows, max_columns);
         REQUIRE(p.get_column() == 0);
     }
-}
-
-TEST_CASE("checks to see if player stays within grid bounds") {
-    Player p;
-    int max_rows = 3;
-    int max_columns = 3;
-
-    p.set_position(0, 0);
-    p.move('w', max_rows, max_columns);
-    REQUIRE(p.get_row() == 0);
-
-    p.move('a', max_rows, max_columns);
-    REQUIRE(p.get_column() == 0);
-
-    p.set_position(2, 2);
-    p.move('s', max_rows, max_columns);
-    REQUIRE(p.get_row() == 2);
-
-    p.move('d', max_rows, max_columns);
-    REQUIRE(p.get_column() == 2);
 }
 
 TEST_CASE("checks if invalid direction does not change position") {
@@ -73,24 +53,24 @@ TEST_CASE("checks if player moves with upppercase WASD") {
     int max_rows = 5;
     int max_columns = 5;
 
-    SECTION("Move down 'S' increases row") {
+    SECTION("checks if player can move down with S") {
         p.move('S', max_rows, max_columns);
         REQUIRE(p.get_row() == 1);
         REQUIRE(p.get_column() == 0);
     }
 
-    SECTION("Move right 'D' increases column") {
+    SECTION("checks if player can right down with D") {
         p.move('D', max_rows, max_columns);
         REQUIRE(p.get_row() == 0);
         REQUIRE(p.get_column() == 1);
     }
 
-    SECTION("Move up 'W' decreases row but stays >= 0") {
+    SECTION("checks if player can up down with W and stays within bounds") {
         p.move('W', max_rows, max_columns);
         REQUIRE(p.get_row() == 0);
     }
 
-    SECTION("Move left 'A' decreases column but stays >= 0") {
+    SECTION("checks if player can left down with A and stays within bounds") {
         p.move('A', max_rows, max_columns);
         REQUIRE(p.get_column() == 0);
     }

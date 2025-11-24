@@ -1,13 +1,19 @@
 #pragma once
 
+#include "inventory.hpp"
+
 class Player
 {
 private:
     int row;
     int column;
+    Inventory inventory;
 
 public:
     Player() : row(0), column(0) {}
+
+    Inventory& get_inventory() { return inventory; }
+    const Inventory& get_inventory() const { return inventory; }
 
     int get_row() const
     { 

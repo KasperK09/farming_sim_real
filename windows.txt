@@ -1,2 +1,4 @@
+-FOR COMPILING WITH CMAKE AND MINGW ON WINDOWS-
+
 cmake -G "MinGW Makefiles" ..
 mingw32-make
