@@ -83,6 +83,13 @@ public:
         std::cout << "Press ENTER to continue...";
         std::getline(std::cin, pause);
 
+        std::cout << "\n*** BUNNY / NOT IMPLENTED ***\n"
+                  << "At the start of the day, there is a chance that a bunny rabbit will appear on the edge of the farm."
+                  << "At the start of each day, the bunny rabbit moves to an adjacent plot."
+                  << "If the player moves into one of the 4 squares around a bunny (i.e. up, down, left, right), the bunny becomes scared and runs away.";
+        std::cout << "Press ENTER to continue...";
+        std::getline(std::cin, pause);
+
         std::cout << "\n=== FINAL NOTES ===\n"
                   << "'.' = farm land\n"
                   << "Manage your moves, watering, and planting to grow crops efficiently!\n"

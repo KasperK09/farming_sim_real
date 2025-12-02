@@ -198,27 +198,27 @@ public:
 {
     case 'C':
         std::cout << "You harvested a carrot!\n";
-        player.get_inventory().add_carrot();      // <-- new
+        player.get_inventory().add_carrot();
         break;
 
     case 'L':
         std::cout << "You harvested lettuce!\n";
-        player.get_inventory().add_lettuce();     // <-- new
+        player.get_inventory().add_lettuce();
         break;
 
     case 'E':
         std::cout << "You harvested spinach!\n";
-        player.get_inventory().add_spinach();     // <-- new
+        player.get_inventory().add_spinach();
         break;
 
     case 'B':
         std::cout << "You harvested a beet!\n";
-        player.get_inventory().add_beet();        // <-- new
+        player.get_inventory().add_beet();
         break;
 
     case 'P':
         std::cout << "You harvested brussel sprouts!\n";
-        player.get_inventory().add_brussels();    // <-- new
+        player.get_inventory().add_brussels();
         break;
 
     default:
