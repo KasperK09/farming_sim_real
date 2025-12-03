@@ -6,6 +6,7 @@
 #include "player.hpp"
 #include "ansi_clear.hpp"
 #include "inventory.hpp"
+#include "bunny.hpp"
 
 
 class Farm
@@ -17,15 +18,27 @@ private:
     int columns;
     bool hasWateredToday = false;
 
+    Bunny *bunny = nullptr;
+
 public:
-    Farm(int r = 5, int c = 7)
+    Farm(int r = 5, int c = 7) //farm size
         : rows(r), columns(c),
           grid(r, std::vector<char>(c, '.')),
           growth(r, std::vector<int>(c, 0)) {}
 
-    int get_rows() const { return rows; }
-    int get_columns() const { return columns; }
-    const std::vector<std::vector<char>>& get_grid() const { return grid; }
+    int get_rows() const
+    {
+        return rows;
+    }
+    int get_columns() const
+    { 
+        return columns;
+    }
+
+    const std::vector<std::vector<char>>& get_grid() const
+    {
+        return grid;
+    }
 
     bool is_tilled_soil(char tile) //tiled soil symbols
     {
@@ -117,7 +130,7 @@ public:
             case '&': return 'b';
             case '?': return 'p';
         }
-        return '?';
+        return 0;
     }
 
     char mature_symbol(char sprout)
@@ -129,12 +142,13 @@ public:
             case 'b': return 'B';
             case 'p': return 'P';
         }
-        return '?';
+        return 0;
     }
 
     void water_crop(const Player& player)
     {
         if (hasWateredToday) {
+            //I think these messages aren't being displayed any more because of the ansi clear
             std::cout << "You already watered a plant today!\n";
             return;
         }
@@ -194,41 +208,60 @@ public:
 
         char& tile = grid[r][c];
 
-    switch (tile)
-{
-    case 'C':
-        std::cout << "You harvested a carrot!\n";
-        player.get_inventory().add_carrot();
-        break;
+        switch (tile)
+    {
+        case 'C':
+            std::cout << "You harvested a carrot!\n";
+            player.get_inventory().add_carrot();
+            break;
 
-    case 'L':
-        std::cout << "You harvested lettuce!\n";
-        player.get_inventory().add_lettuce();
-        break;
+        case 'L':
+            std::cout << "You harvested lettuce!\n";
+            player.get_inventory().add_lettuce();
+            break;
 
-    case 'E':
-        std::cout << "You harvested spinach!\n";
-        player.get_inventory().add_spinach();
-        break;
+        case 'E':
+            std::cout << "You harvested spinach!\n";
+            player.get_inventory().add_spinach();
+            break;
 
-    case 'B':
-        std::cout << "You harvested a beet!\n";
-        player.get_inventory().add_beet();
-        break;
+        case 'B':
+            std::cout << "You harvested a beet!\n";
+            player.get_inventory().add_beet();
+            break;
 
-    case 'P':
-        std::cout << "You harvested brussel sprouts!\n";
-        player.get_inventory().add_brussels();
-        break;
+        case 'P':
+            std::cout << "You harvested brussel sprouts!\n";
+            player.get_inventory().add_brussels();
+            break;
 
-    default:
-        std::cout << "Nothing to harvest.\n";
-        return;
-}
-
-
-
+        default:
+            std::cout << "Nothing to harvest.\n";
+            return;
+    }
         grid[r][c] = '.';
         growth[r][c] = 0;
+    }
+
+    void spawn_bunny(int row)
+    {
+        if (bunny)
+        {
+            return;
+        }
+        if (row < 0 || row >= rows)
+        {
+            return;
+        }
+
+        bunny = new Bunny(row, 0);
+    }
+
+    void eat_bunny(int row)
+    {
+        int r = bunny -> get_row();
+        int c = bunny -> get_column();
+
+        char
     }
 };
