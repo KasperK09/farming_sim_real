@@ -243,25 +243,25 @@ public:
         growth[r][c] = 0;
     }
 
-    void spawn_bunny(int row)
-    {
-        if (bunny)
-        {
-            return;
-        }
-        if (row < 0 || row >= rows)
-        {
-            return;
-        }
+    // void spawn_bunny(int row)
+    // {
+    //     if (bunny)
+    //     {
+    //         return;
+    //     }
+    //     if (row < 0 || row >= rows)
+    //     {
+    //         return;
+    //     }
 
-        bunny = new Bunny(row, 0);
-    }
+    //     bunny = new Bunny(row, 0);
+    // }
 
-    void eat_bunny(int row)
-    {
-        int r = bunny -> get_row();
-        int c = bunny -> get_column();
+    // void eat_bunny(int row)
+    // {
+    //     int r = bunny -> get_row();
+    //     int c = bunny -> get_column();
 
-        char
-    }
+    //     char
+    // }
 };

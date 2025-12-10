@@ -1,4 +1,6 @@
 #include <iostream>
+#include <termios.h>
+#include <unistd.h>
 
 #include "legend.hpp"
 #include "farm.hpp"
@@ -6,12 +8,25 @@
 #include "player.hpp"
 #include "ansi_clear.hpp"
 
+char getch()
+{
+    termios oldt, newt;
+    tcgetattr(STDIN_FILENO, &oldt);
+
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    char c = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+
+    return c;
+}
 
 int main()
 {
     Legend::show_legend();
     clear_screen();
-
 
     Farm farm(5, 7);
     Player player;
@@ -21,25 +36,26 @@ int main()
     bool running = true;
 
     while (running)
-{
-    FarmPrinter::print(farm, player);
+    {
+        clear_screen();
 
-    std::cout << "=== Day " << day << " ===\n";
+        FarmPrinter::print(farm, player);
 
-    std::cout 
-        << "\nMove (WASD)\n"
-        << "Plant Carrot (C)\n"
-        << "Plant Lettuce (L)\n"
-        << "Plant Spinach (E)\n"
-        << "Plant Beet (B)\n"
-        << "Plant Brussel Sprouts (P)\n"
-        << "Harvest (H)\n"
-        << "Water (R)\n"
-        << "Quit (Q)\n"
-        << "Choose action: ";
+        std::cout << "=== Day " << day << " ===\n\n";
 
-    std::cin >> input;
+        std::cout
+            << "Move (WASD)\n"
+            << "Plant Carrot (C)\n"
+            << "Plant Lettuce (L)\n"
+            << "Plant Spinach (E)\n"
+            << "Plant Beet (B)\n"
+            << "Plant Brussel Sprouts (P)\n"
+            << "Harvest (H)\n"
+            << "Water (R)\n"
+            << "Quit (Q)\n"
+            << "Choose action: ";
 
+        input = getch();
 
         switch (input)
         {
@@ -48,7 +64,7 @@ int main()
                 running = false;
 
                 int score = player.get_inventory().get_score();
-                std::cout << "\n===== FINAL SCORE DAY"<< day << " =====\n";
+                std::cout << "\n===== FINAL SCORE DAY " << day << " =====\n";
                 std::cout << "Carrot (20 each)\n";
                 std::cout << "Lettuce (40 each)\n";
                 std::cout << "Spinach (50 each)\n";
@@ -60,7 +76,6 @@ int main()
 
                 break;
             }
-
 
             case 'c': case 'C':
                 farm.plant_carrot(player);
@@ -99,19 +114,15 @@ int main()
                 break;
         }
 
-
         if (steps >= 10)
         {
             std::cout << "\nDay " << day << " has ended!\n";
 
             farm.grow_crops();
-
             steps = 0;
             day++;
 
             std::cout << "Your crops have grown.\n\n";
         }
-
-        std::cout << '\n';
     }
 }
