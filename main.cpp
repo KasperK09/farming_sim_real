@@ -1,5 +1,4 @@
 #include <iostream>
-#include <termios.h>
 #include <unistd.h>
 
 #include "legend.hpp"
@@ -7,21 +6,6 @@
 #include "farm_printer.hpp"
 #include "player.hpp"
 #include "ansi_clear.hpp"
-
-char getch()
-{
-    termios oldt, newt;
-    tcgetattr(STDIN_FILENO, &oldt);
-
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    char c = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-
-    return c;
-}
 
 int main()
 {
@@ -54,8 +38,6 @@ int main()
             << "Water (R)\n"
             << "Quit (Q)\n"
             << "Choose action: ";
-
-        input = getch();
 
         switch (input)
         {
