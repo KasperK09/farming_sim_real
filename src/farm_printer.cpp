@@ -1,7 +1,6 @@
-#include <iostream>
-
 #include "farm_printer.hpp"
 #include "ansi_clear.hpp"
+#include <iostream>
 
 void FarmPrinter::print_static(int rows, int columns)
 {
@@ -15,8 +14,6 @@ void FarmPrinter::print_static(int rows, int columns)
     }
 }
 
-
-
 void FarmPrinter::print(const Farm &farm, const Player &player)
 {
     clear_screen();
@@ -29,10 +26,21 @@ void FarmPrinter::print(const Farm &farm, const Player &player)
     {
         for (int j = 0; j < columns; ++j)
         {
+            // Player has display priority
             if (i == player.get_row() && j == player.get_column())
+            {
                 std::cout << "@ ";
-            else
-                std::cout << grid[i][j] << ' ';
+                continue;
+            }
+
+            // Bunny overlays grid but does NOT modify grid
+            if (farm.has_bunny() && farm.get_bunny_row() == i && farm.get_bunny_column() == j)
+            {
+                std::cout << "R ";
+                continue;
+            }
+
+            std::cout << grid[i][j] << ' ';
         }
         std::cout << "\n";
     }

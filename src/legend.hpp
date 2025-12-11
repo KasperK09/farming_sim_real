@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <string>
-
 #include "ansi_clear.hpp"
 
 class Legend
@@ -27,8 +26,10 @@ public:
                   << "Plant Brussel Sprouts: P\n"
                   << "Harvest Mature Crops: H\n"
                   << "Water a Plant: R\n"
+                  << "Fertilize: F\n"
                   << "Quit Game: Q\n\n"
-                  << "Player character is: '@'\n\n";
+                  << "Player character is: '@'\n"
+                  << "Bunny character is: 'R'\n\n";
         std::cout << "Press ENTER to continue...";
         std::getline(std::cin, pause);
 
@@ -66,14 +67,14 @@ public:
 
         std::cout << "\n*** IMPORTANT GAME RULES ***\n"
                   << "A DAY ENDS AFTER 10 MOVES.\n"
-                  << "Crops add +1 to there counter per day.\n"
+                  << "Crops add +1 to their counter per day.\n"
                   << "You may water a plant once per day for +1 extra growth.\n"
                   << "This means watered plants are +2 at end of day\n";
         std::cout << "Press ENTER to continue...";
         std::getline(std::cin, pause);
 
         std::cout << "\n*** GAMES SCORING ***\n"
-                  << "When you quit the game tell you your score.\n"
+                  << "When you quit the game it tells you your score.\n"
                   << "\n===== FINAL SCORE =====\n"
                   << "Carrot (20 each)\n"
                   << "Lettuce (40 each)\n"
@@ -83,10 +84,9 @@ public:
         std::cout << "Press ENTER to continue...";
         std::getline(std::cin, pause);
 
-        std::cout << "\n*** BUNNY / NOT IMPLENTED ***\n"
-                  << "At the start of the day, there is a chance that a bunny rabbit will appear on the edge of the farm."
-                  << "At the start of each day, the bunny rabbit moves to an adjacent plot."
-                  << "If the player moves into one of the 4 squares around a bunny (i.e. up, down, left, right), the bunny becomes scared and runs away.";
+        std::cout << "\n*** BUNNY ***\n"
+                  << "At the start of the day, there is a chance that a bunny rabbit will appear on the edge of the farm.\n"
+                  << "If the player moves into one of the 4 squares around a bunny (i.e. up, down, left, right), the bunny becomes scared and will run away at the end of the day.\n";
         std::cout << "Press ENTER to continue...";
         std::getline(std::cin, pause);
 

@@ -1,267 +1,288 @@
 #pragma once
+#ifndef FARM_HPP
+#define FARM_HPP
 
 #include <vector>
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+#include <utility>
 
 #include "player.hpp"
-#include "ansi_clear.hpp"
 #include "inventory.hpp"
 #include "bunny.hpp"
-
 
 class Farm
 {
 private:
     std::vector<std::vector<char>> grid;
     std::vector<std::vector<int>> growth;
+    std::vector<std::vector<int>> fertilizer;
     int rows;
     int columns;
     bool hasWateredToday = false;
 
-    Bunny *bunny = nullptr;
+    Bunny* bunny = nullptr;
+    static int bunny_spawn_chance_percent;
 
 public:
-    Farm(int r = 5, int c = 7) //farm size
+    Farm(int r = 5, int c = 7)
         : rows(r), columns(c),
           grid(r, std::vector<char>(c, '.')),
-          growth(r, std::vector<int>(c, 0)) {}
-
-    int get_rows() const
+          growth(r, std::vector<int>(c, 0)),
+          fertilizer(r, std::vector<int>(c, 0))
     {
-        return rows;
-    }
-    int get_columns() const
-    { 
-        return columns;
+        std::srand(static_cast<unsigned int>(std::time(nullptr)));
     }
 
-    const std::vector<std::vector<char>>& get_grid() const
-    {
-        return grid;
-    }
+    ~Farm() { if (bunny) { delete bunny; bunny = nullptr; } }
 
-    bool is_tilled_soil(char tile) //tiled soil symbols
-    {
-        return tile=='#' || tile=='%' || tile=='*' || tile=='&' || tile=='?';
-    }
+    int get_rows() const { return rows; }
+    int get_columns() const { return columns; }
+    const std::vector<std::vector<char>>& get_grid() const { return grid; }
 
-    bool is_sprout(char tile) //sprout symbols
-    {
-        return tile=='c' || tile=='l' || tile=='e' || tile=='b' || tile=='p';
-    }
+    bool has_bunny() const { return bunny && bunny->is_alive(); }
+    int get_bunny_row() const { return has_bunny() ? bunny->get_row() : -1; }
+    int get_bunny_column() const { return has_bunny() ? bunny->get_col() : -1; }
 
-    bool is_mature(char tile) //mature symbols
-    {
-        return tile=='C' || tile=='L' || tile=='E' || tile=='B' || tile=='P';
-    }
+    Inventory& get_inventory() { static Inventory dummy; return dummy; }
+    const Inventory& get_inventory() const { static Inventory dummy; return dummy; }
+
+    bool is_tilled_soil(char tile) { return tile=='#'||tile=='%'||tile=='*'||tile=='&'||tile=='?'; }
+    bool is_sprout(char tile) { return tile=='c'||tile=='l'||tile=='e'||tile=='b'||tile=='p'; }
+    bool is_mature(char tile) { return tile=='C'||tile=='L'||tile=='E'||tile=='B'||tile=='P'; }
 
     void plant(const Player& player, char seed_symbol, const std::string& name)
     {
         int r = player.get_row();
         int c = player.get_column();
-
-        if (grid[r][c] != '.')
-        {
-            std::cout << "You can't plant here.\n";
-            return;
-        }
+        if (grid[r][c] != '.'){ std::cout << "You can't plant here.\n"; return; }
 
         grid[r][c] = seed_symbol;
         growth[r][c] = 0;
-
+        fertilizer[r][c] = 0;
         std::cout << "You planted " << name << "\n";
     }
 
-    void plant_carrot(const Player& player)
-    {
-        plant(player, '#', "carrot");
-    }
-
-    void plant_lettuce(const Player& player) 
-    {
-        plant(player, '%', "lettuce");
-    }
-
-    void plant_spinach(const Player& player) 
-    {
-        plant(player, '*', "spinach");
-    }
-
-    void plant_beet(const Player& player) 
-    {
-        plant(player, '&', "beet");
-    }
-
-    void plant_brussel_sprouts(const Player& player) 
-    {
-        plant(player, '?', "brussel sprouts");
-    }
-
-    int days_to_sprout(char seed)
-    {
-        switch (seed) {
-            case '#': return 1;
-            case '%': return 2;
-            case '*': return 2;
-            case '&': return 2;
-            case '?': return 5;
-        }
-        return 0;
-    }
-
-    int days_to_mature(char sprout)
-    {
-        switch (sprout) {
-            case 'c': return 1;
-            case 'l': return 2;
-            case 'e': return 3;
-            case 'b': return 5;
-            case 'p': return 10;
-        }
-        return 0;
-    }
-
-    char sprout_symbol(char seed)
-    {
-        switch (seed) {
-            case '#': return 'c';
-            case '%': return 'l';
-            case '*': return 'e';
-            case '&': return 'b';
-            case '?': return 'p';
-        }
-        return 0;
-    }
-
-    char mature_symbol(char sprout)
-    {
-        switch (sprout) {
-            case 'c': return 'C';
-            case 'l': return 'L';
-            case 'e': return 'E';
-            case 'b': return 'B';
-            case 'p': return 'P';
-        }
-        return 0;
-    }
+    void plant_carrot(const Player& player) { plant(player, '#', "carrot"); }
+    void plant_lettuce(const Player& player) { plant(player, '%', "lettuce"); }
+    void plant_spinach(const Player& player) { plant(player, '*', "spinach"); }
+    void plant_beet(const Player& player) { plant(player, '&', "beet"); }
+    void plant_brussel_sprouts(const Player& player) { plant(player, '?', "brussel sprouts"); }
 
     void water_crop(const Player& player)
     {
-        if (hasWateredToday) {
-            //I think these messages aren't being displayed any more because of the ansi clear
-            std::cout << "You already watered a plant today!\n";
-            return;
-        }
+        if (hasWateredToday){ std::cout << "You already watered a plant today!\n"; return; }
 
         int r = player.get_row();
         int c = player.get_column();
-
         char tile = grid[r][c];
 
-        if (tile == '.' || is_mature(tile)) {
-            std::cout << "There's nothing here to water.\n";
-            return;
-        }
+        if (tile == '.' || is_mature(tile)){ std::cout << "There's nothing here to water.\n"; return; }
 
         growth[r][c]++;
-
         hasWateredToday = true;
-
         std::cout << "You watered the plant! It grew faster.\n";
+    }
+
+    void fertilize_tile(const Player& player)
+    {
+        int r = player.get_row();
+        int c = player.get_column();
+
+        if (grid[r][c] == '.'){ std::cout << "Nothing to fertilize.\n"; return; }
+
+        fertilizer[r][c]++;
+        if (fertilizer[r][c] >= 3)
+        {
+            std::cout << "Over-fertilized! Plant died.\n";
+            grid[r][c] = '.';
+            growth[r][c] = 0;
+            fertilizer[r][c] = 0;
+        }
+        else if (fertilizer[r][c] == 2) { std::cout << "Second fertilizer applied (no extra effect).\n"; }
+        else { std::cout << "Fertilized! +1 yield.\n"; }
     }
 
     void grow_crops()
     {
         hasWateredToday = false;
-
-        for (int r = 0; r < rows; r++)
-        {
-            for (int c = 0; c < columns; c++)
+        for(int r=0;r<rows;r++)
+            for(int c=0;c<columns;c++)
             {
                 char& tile = grid[r][c];
-
                 if (tile == '.') continue;
 
                 growth[r][c]++;
-
                 if (is_tilled_soil(tile))
                 {
-                    if (growth[r][c] >= days_to_sprout(tile)) {
+                    if (growth[r][c] >= days_to_sprout(tile))
+                    {
                         tile = sprout_symbol(tile);
                         growth[r][c] = 0;
                     }
                 }
                 else if (is_sprout(tile))
                 {
-                    if (growth[r][c] >= days_to_mature(tile)) {
+                    if (growth[r][c] >= days_to_mature(tile))
                         tile = mature_symbol(tile);
-                    }
                 }
             }
-        }
     }
 
     void harvest_crop(Player& player)
     {
         int r = player.get_row();
         int c = player.get_column();
+        char tile = grid[r][c];
+        int yield = (fertilizer[r][c]>=1) ? 2 : 1;
 
-        char& tile = grid[r][c];
+        switch(tile)
+        {
+            case 'C': for(int i=0;i<yield;i++) player.get_inventory().add_carrot(); std::cout<<"You harvested "<<yield<<" carrot(s)!\n"; break;
+            case 'L': for(int i=0;i<yield;i++) player.get_inventory().add_lettuce(); std::cout<<"You harvested "<<yield<<" lettuce!\n"; break;
+            case 'E': for(int i=0;i<yield;i++) player.get_inventory().add_spinach(); std::cout<<"You harvested "<<yield<<" spinach!\n"; break;
+            case 'B': for(int i=0;i<yield;i++) player.get_inventory().add_beet(); std::cout<<"You harvested "<<yield<<" beet(s)!\n"; break;
+            case 'P': for(int i=0;i<yield;i++) player.get_inventory().add_brussels(); std::cout<<"You harvested "<<yield<<" brussel sprout(s)!\n"; break;
+            default: std::cout<<"Nothing to harvest.\n"; return;
+        }
 
-        switch (tile)
+        grid[r][c]='.';
+        growth[r][c]=0;
+        fertilizer[r][c]=0;
+    }
+
+    void maybe_spawn_bunny(const Player& player)
     {
-        case 'C':
-            std::cout << "You harvested a carrot!\n";
-            player.get_inventory().add_carrot();
-            break;
-
-        case 'L':
-            std::cout << "You harvested lettuce!\n";
-            player.get_inventory().add_lettuce();
-            break;
-
-        case 'E':
-            std::cout << "You harvested spinach!\n";
-            player.get_inventory().add_spinach();
-            break;
-
-        case 'B':
-            std::cout << "You harvested a beet!\n";
-            player.get_inventory().add_beet();
-            break;
-
-        case 'P':
-            std::cout << "You harvested brussel sprouts!\n";
-            player.get_inventory().add_brussels();
-            break;
-
-        default:
-            std::cout << "Nothing to harvest.\n";
-            return;
-    }
-        grid[r][c] = '.';
-        growth[r][c] = 0;
+        if (has_bunny()) return;
+        int roll = std::rand()%100;
+        if (roll < bunny_spawn_chance_percent)
+            bunny = new Bunny(0, 0, rows, columns); // spawn top-left
     }
 
-    // void spawn_bunny(int row)
-    // {
-    //     if (bunny)
-    //     {
-    //         return;
-    //     }
-    //     if (row < 0 || row >= rows)
-    //     {
-    //         return;
-    //     }
+    void bunny_eat_if_on_plant()
+    {
+        if (!has_bunny()) return;
+        int r = bunny->get_row();
+        int c = bunny->get_col();
+        if(grid[r][c]!='.')
+        {
+            grid[r][c]='.';
+            growth[r][c]=0;
+            fertilizer[r][c]=0;
+            std::cout<<"A bunny ate your plant at ("<<r<<","<<c<<")!\n";
+        }
+    }
 
-    //     bunny = new Bunny(row, 0);
-    // }
+    void update_bunny_after_player_move(const Player& player)
+    {
+        if(!has_bunny()) return;
 
-    // void eat_bunny(int row)
-    // {
-    //     int r = bunny -> get_row();
-    //     int c = bunny -> get_column();
+        int br = bunny->get_row();
+        int bc = bunny->get_col();
+        int pr = player.get_row();
+        int pc = player.get_column();
 
-    //     char
-    // }
+        // If player is adjacent (up/down/left/right)
+        bool adjacent = (abs(pr - br) == 1 && pc == bc) || (abs(pc - bc) == 1 && pr == br);
+
+        if(adjacent && !bunny->is_scared())
+        {
+            // Mark as scared
+            bunny->scare();
+            std::cout << "The bunny got scared and ran away!\n";
+
+            // Immediately run away
+            Position player_pos{pr, pc};
+            bunny->run_away(player_pos);
+
+            // Remove bunny if it ran off map
+            if(!bunny->is_alive())
+            {
+                delete bunny;
+                bunny = nullptr;
+            }
+        }
+    }
+
+
+    void move_bunny_end_of_day(const Player& player)
+    {
+        if(!has_bunny()) return;
+
+        if(bunny->is_scared())
+        {
+            Position player_pos{player.get_row(), player.get_column()};
+            bunny->run_away(player_pos);
+
+            // Delete bunny if it ran off the map
+            if(!bunny->is_alive())
+            {
+                delete bunny;
+                bunny = nullptr;
+
+                // Try spawning a new bunny immediately
+                maybe_spawn_bunny(player);
+            }
+        }
+        else
+        {
+            // Move right
+            Position p = bunny->get_position();
+            int new_r = p.row;
+            int new_c = p.col + 1;
+
+            // If bunny goes off the right edge, delete it
+            if(new_c >= columns)
+            {
+                delete bunny;
+                bunny = nullptr;
+
+                // Try spawning a new bunny immediately
+                maybe_spawn_bunny(player);
+            }
+            else
+            {
+                bunny->set_position(new_r, new_c);
+            }
+        }
+    }
+
+
+
+
+
+    void start_of_day_updates(const Player& player)
+    {
+        maybe_spawn_bunny(player);
+        bunny_eat_if_on_plant();
+    }
+
+    static void set_bunny_spawn_chance(int percent)
+    {
+        bunny_spawn_chance_percent = std::max(0,std::min(100,percent));
+    }
+
+    int days_to_sprout(char seed)
+    {
+        switch(seed){ case '#':return 1; case '%':return 2; case '*':return 2; case '&':return 2; case '?':return 5;} return 0;
+    }
+
+    int days_to_mature(char sprout)
+    {
+        switch(sprout){ case 'c':return 1; case 'l':return 2; case 'e':return 3; case 'b':return 5; case 'p':return 10;} return 0;
+    }
+
+    char sprout_symbol(char seed)
+    {
+        switch(seed){ case '#':return 'c'; case '%':return 'l'; case '*':return 'e'; case '&':return 'b'; case '?':return 'p';} return 0;
+    }
+
+    char mature_symbol(char sprout)
+    {
+        switch(sprout){ case 'c':return 'C'; case 'l':return 'L'; case 'e':return 'E'; case 'b':return 'B'; case 'p':return 'P';} return 0;
+    }
 };
+
+#endif
