@@ -10,179 +10,178 @@
 
 TEST_CASE("check if bunny initializes correctly")
 {
-    Bunny b(3, 4, 10, 10);
+    Bunny bunny(3, 4, 10, 10);
 
-    REQUIRE(b.get_row() == 3);
-    REQUIRE(b.get_col() == 4);
-    REQUIRE(b.is_alive() == true);
-    REQUIRE(b.is_scared() == false);
+    REQUIRE(bunny.get_row() == 3);
+    REQUIRE(bunny.get_col() == 4);
+    REQUIRE(bunny.is_alive() == true);
+    REQUIRE(bunny.is_scared() == false);
 }
 
 TEST_CASE("check if bunny scare() changes bunny to scared")
 {
-    Bunny b(2, 2, 10, 10);
+    Bunny bunny(2, 2, 10, 10);
 
-    REQUIRE_FALSE(b.is_scared());
-    b.scare();
-    REQUIRE(b.is_scared());
+    REQUIRE_FALSE(bunny.is_scared());
+    bunny.scare();
+    REQUIRE(bunny.is_scared());
 }
 
 TEST_CASE("check if bunny runs upward when scared and player is below")
 {
-    Bunny b(5, 5, 20, 20);
-    b.scare();
+    Bunny bunny(5, 5, 20, 20);
+    bunny.scare();
 
-    Position player{10, 5}; //player is below bunny
+    Position player_position{10, 5}; //player is below bunny
 
-    b.run_away(player);
+    bunny.run_away(player_position);
 
     // Bunny should move up by 4 rows
-    REQUIRE(b.get_row() == 1);
-    REQUIRE(b.get_col() == 5);
-    REQUIRE_FALSE(b.is_scared());
+    REQUIRE(bunny.get_row() == 1);
+    REQUIRE(bunny.get_col() == 5);
+    REQUIRE_FALSE(bunny.is_scared());
 }
 
 TEST_CASE("check if bunny runs downward when player is above")
 {
-    Bunny b(5, 5, 20, 20);
-    b.scare();
+    Bunny bunny(5, 5, 20, 20);
+    bunny.scare();
 
-    Position player{0, 5}; //player is above bunny
+    Position player_position{0, 5}; //player is above bunny
 
-    b.run_away(player);
+    bunny.run_away(player_position);
 
     //Bunny should move down by 4
-    REQUIRE(b.get_row() == 9);
-    REQUIRE(b.get_col() == 5);
+    REQUIRE(bunny.get_row() == 9);
+    REQUIRE(bunny.get_col() == 5);
 }
 
 TEST_CASE("checks if bunny runs right when player is left")
 {
-    Bunny b(5, 5, 20, 20);
-    b.scare();
+    Bunny bunny(5, 5, 20, 20);
+    bunny.scare();
 
-    Position player{5, 0}; // player comes from the left
+    Position player_position{5, 0}; // player comes from the left
 
-    b.run_away(player);
+    bunny.run_away(player_position);
 
-    REQUIRE(b.get_row() == 5);
-    REQUIRE(b.get_col() == 9);
+    REQUIRE(bunny.get_row() == 5);
+    REQUIRE(bunny.get_col() == 9);
 }
 
 TEST_CASE("checks if bunny runs left when player is right")
 {
-    Bunny b(5, 5, 20, 20);
-    b.scare();
+    Bunny bunny(5, 5, 20, 20);
+    bunny.scare();
 
-    Position player{5, 10}; //player comes from the right
+    Position player_position{5, 10}; //player comes from the right
 
-    b.run_away(player);
+    bunny.run_away(player_position);
 
-    REQUIRE(b.get_row() == 5);
-    REQUIRE(b.get_col() == 1);
+    REQUIRE(bunny.get_row() == 5);
+    REQUIRE(bunny.get_col() == 1);
 }
 
 TEST_CASE("checks if bunny dies when running out of bounds")
 {
-    Bunny b(1, 1, 10, 10);
-    b.scare();
+    Bunny bunny(1, 1, 10, 10);
+    bunny.scare();
 
-    Position player{0, 1}; //bunny runs down
-    b.run_away(player);
+    Position player_below{0, 1}; //bunny runs down
+    bunny.run_away(player_below);
 
-    REQUIRE(b.is_alive());
+    REQUIRE(bunny.is_alive());
 
-    b.scare();
-    Position player2{10, 1}; //bunny runs up
-    b.run_away(player2);
+    bunny.scare();
+    Position player_above{10, 1}; //bunny runs up
+    bunny.run_away(player_above);
 
-    REQUIRE(b.is_alive());
+    REQUIRE(bunny.is_alive());
     
     //scare and run up but should go off grid
-    b.scare();
-    b.run_away(player2);
+    bunny.scare();
+    bunny.run_away(player_above);
 
-    REQUIRE_FALSE(b.is_alive());
+    REQUIRE_FALSE(bunny.is_alive());
 }
 
-TEST_CASE("Bunny spawns correctly")
+TEST_CASE("check if Bunny spawns correctly")
 {
     Farm::set_bunny_spawn_chance(100); //should always spawn
-    Farm f(5, 5);
-    Player p;
+    Farm farm(5, 5);
+    Player player;
 
-    f.start_of_day_updates(p);
-    REQUIRE(f.has_bunny());
+    farm.start_of_day_updates(player);
+    REQUIRE(farm.has_bunny());
 }
 
-TEST_CASE("Bunny does NOT spawn if chance is 0")
+TEST_CASE("check if Bunny does not spawn if chance is 0")
 {
     Farm::set_bunny_spawn_chance(0);
-    Farm f(5, 5);
-    Player p;
+    Farm farm(5, 5);
+    Player player;
 
-    f.start_of_day_updates(p);
-    REQUIRE_FALSE(f.has_bunny());
+    farm.start_of_day_updates(player);
+    REQUIRE_FALSE(farm.has_bunny());
 }
 
-TEST_CASE("Bunny eats a plant on its tile")
+TEST_CASE("check if Bunny eats a plant on its tile")
 {
     Farm::set_bunny_spawn_chance(100);
-    Farm f(5, 5);
-    Player p;
+    Farm farm(5, 5);
+    Player player;
 
-    f.start_of_day_updates(p);
-    REQUIRE(f.has_bunny());
+    farm.start_of_day_updates(player);
+    REQUIRE(farm.has_bunny());
 
-    int r = f.get_bunny_row();
-    int c = f.get_bunny_column();
+    int bunny_row = farm.get_bunny_row();
+    int bunny_col = farm.get_bunny_column();
 
-    f.debug_grid()[r][c] = '#'; //force a plant under the bunny
+    farm.debug_grid()[bunny_row][bunny_col] = '#'; //force a plant under the bunny
 
-    f.bunny_eat_if_on_plant();
+    farm.bunny_eat_if_on_plant();
 
-    REQUIRE(f.debug_grid()[r][c] == '.'); //check that bunny ate it
+    REQUIRE(farm.debug_grid()[bunny_row][bunny_col] == '.'); //check that bunny ate it
 }
 
-
-TEST_CASE("Bunny deletes itself when walking out of bounds")
+TEST_CASE("check if Bunny deletes itself when walking out of bounds")
 {
     Farm::set_bunny_spawn_chance(100);
-    Farm f(3, 3);
-    Player p;
+    Farm farm(3, 3);
+    Player player;
 
-    f.start_of_day_updates(p);
-    REQUIRE(f.has_bunny());
+    farm.start_of_day_updates(player);
+    REQUIRE(farm.has_bunny());
 
     //force bunny to be at edge
-    f.get_bunny_row();
-    f.get_bunny_column();
+    farm.get_bunny_row();
+    farm.get_bunny_column();
 
     //manually set to right border
-    f.move_bunny_end_of_day(p);
+    farm.move_bunny_end_of_day(player);
 
     //bunny should delete when moving out
-    if (f.get_bunny_column() == -1)
-        REQUIRE_FALSE(f.has_bunny());
+    if (farm.get_bunny_column() == -1)
+        REQUIRE_FALSE(farm.has_bunny());
 }
 
-TEST_CASE("Bunny gets scared when adjacent to player")
+TEST_CASE("check if Bunny gets scared when adjacent to player")
 {
-    Farm f(5, 5);
+    Farm farm(5, 5);
     Farm::set_bunny_spawn_chance(100);
 
-    Player p;
-    f.start_of_day_updates(p);
-    REQUIRE(f.has_bunny());
+    Player player;
+    farm.start_of_day_updates(player);
+    REQUIRE(farm.has_bunny());
 
-    int br = f.get_bunny_row();
-    int bc = f.get_bunny_column();
+    int bunny_row = farm.get_bunny_row();
+    int bunny_col = farm.get_bunny_column();
 
     //move player above bunny
-    p.set_position(br - 1, bc);
+    player.set_position(bunny_row - 1, bunny_col);
 
-    f.update_bunny_after_player_move(p);
+    farm.update_bunny_after_player_move(player);
 
     //delete bunny, but must NOT be in old location
-    REQUIRE((!f.has_bunny() || f.get_bunny_row() != br || f.get_bunny_column() != bc));
+    REQUIRE((!farm.has_bunny() || farm.get_bunny_row() != bunny_row || farm.get_bunny_column() != bunny_col));
 }
