@@ -13,7 +13,7 @@ int main()
     Legend::show_legend();
     clear_screen();
 
-    Farm farm(3, 3);
+    Farm farm(5, 7); //edit farm size
     Player player;
     char input = '\0';
     int steps = 0;
