@@ -61,6 +61,18 @@ public:
         return grid;
     }
 
+    //for bunny tests
+    std::vector<std::vector<char>>& debug_grid()
+    {
+        return grid;
+    }
+
+    const std::vector<std::vector<char>>& debug_grid() const
+    {
+        return grid;
+    }
+
+
     //for bunny
     bool has_bunny() const
     {

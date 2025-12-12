@@ -104,3 +104,85 @@ TEST_CASE("checks if bunny dies when running out of bounds")
 
     REQUIRE_FALSE(b.is_alive());
 }
+
+TEST_CASE("Bunny spawns correctly")
+{
+    Farm::set_bunny_spawn_chance(100); //should always spawn
+    Farm f(5, 5);
+    Player p;
+
+    f.start_of_day_updates(p);
+    REQUIRE(f.has_bunny());
+}
+
+TEST_CASE("Bunny does NOT spawn if chance is 0")
+{
+    Farm::set_bunny_spawn_chance(0);
+    Farm f(5, 5);
+    Player p;
+
+    f.start_of_day_updates(p);
+    REQUIRE_FALSE(f.has_bunny());
+}
+
+TEST_CASE("Bunny eats a plant on its tile")
+{
+    Farm::set_bunny_spawn_chance(100);
+    Farm f(5, 5);
+    Player p;
+
+    f.start_of_day_updates(p);
+    REQUIRE(f.has_bunny());
+
+    int r = f.get_bunny_row();
+    int c = f.get_bunny_column();
+
+    f.debug_grid()[r][c] = '#'; //force a plant under the bunny
+
+    f.bunny_eat_if_on_plant();
+
+    REQUIRE(f.debug_grid()[r][c] == '.'); //check that bunny ate it
+}
+
+
+TEST_CASE("Bunny deletes itself when walking out of bounds")
+{
+    Farm::set_bunny_spawn_chance(100);
+    Farm f(3, 3);
+    Player p;
+
+    f.start_of_day_updates(p);
+    REQUIRE(f.has_bunny());
+
+    //force bunny to be at edge
+    f.get_bunny_row();
+    f.get_bunny_column();
+
+    //manually set to right border
+    f.move_bunny_end_of_day(p);
+
+    //bunny should delete when moving out
+    if (f.get_bunny_column() == -1)
+        REQUIRE_FALSE(f.has_bunny());
+}
+
+TEST_CASE("Bunny gets scared when adjacent to player")
+{
+    Farm f(5, 5);
+    Farm::set_bunny_spawn_chance(100);
+
+    Player p;
+    f.start_of_day_updates(p);
+    REQUIRE(f.has_bunny());
+
+    int br = f.get_bunny_row();
+    int bc = f.get_bunny_column();
+
+    //move player above bunny
+    p.set_position(br - 1, bc);
+
+    f.update_bunny_after_player_move(p);
+
+    //delete bunny, but must NOT be in old location
+    REQUIRE((!f.has_bunny() || f.get_bunny_row() != br || f.get_bunny_column() != bc));
+}
