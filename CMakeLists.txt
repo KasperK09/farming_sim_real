@@ -34,6 +34,7 @@ add_executable(farm_test
     tests/veg_beet_test.cpp
     tests/veg_brussel_sprouts_test.cpp
     tests/farm_watering_test.cpp
+    tests/bunny_test.cpp
 
     src/farm.cpp
     src/farm_printer.cpp

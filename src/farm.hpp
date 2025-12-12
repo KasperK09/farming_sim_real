@@ -44,7 +44,7 @@ public:
         }
     }
 
-
+    //size of farm
     int get_rows() const
     {
         return rows;
@@ -55,11 +55,13 @@ public:
         return columns;
     }
 
+    //farm tiles
     const std::vector<std::vector<char>>& get_grid() const
     {
         return grid;
     }
 
+    //for bunny
     bool has_bunny() const
     {
         return bunny && bunny->is_alive();
@@ -73,18 +75,6 @@ public:
     int get_bunny_column() const
     {
         return has_bunny() ? bunny->get_col() : -1;
-    }
-
-    Inventory& get_inventory()
-    {
-        static Inventory dummy;
-        return dummy;
-    }
-
-    const Inventory& get_inventory() const
-    {
-        static Inventory dummy;
-        return dummy;
     }
 
     //checks if tile has something on it
@@ -104,6 +94,7 @@ public:
     }
 
 
+    //checks if tile is empty if not lets u plant
     void plant(const Player& player, char seed_symbol, const std::string& name)
     {
         int r = player.get_row();
@@ -120,6 +111,7 @@ public:
         std::cout << "You planted " << name << "\n";
     }
 
+    //plant seeds 
     void plant_carrot(const Player& player)
     {
         plant(player, '#', "carrot");
@@ -166,6 +158,7 @@ public:
         std::cout << "You watered the plant! It grew faster.\n";
     }
 
+    //can fertilize any age of plant
     void fertilize_tile(const Player& player)
     {
         int r = player.get_row();
@@ -311,20 +304,20 @@ public:
         int pr = player.get_row();
         int pc = player.get_column();
 
-        //If player is adjacent (up/down/left/right)
+        //check if player is adjacent
         bool adjacent = (abs(pr - br) == 1 && pc == bc) || (abs(pc - bc) == 1 && pr == br);
 
         if(adjacent && !bunny->is_scared())
         {
-            //Mark as scared
-            bunny->scare();
+            //mark as scared
+            bunny -> scare();
             std::cout << "The bunny got scared and ran away!\n";
 
-            //Immediately run away
+            //immediately runs away from player
             Position player_pos{pr, pc};
-            bunny->run_away(player_pos);
+            bunny -> run_away(player_pos);
 
-            //Remove bunny if it ran off map
+            //delete bunny if it ran off map
             if(!bunny->is_alive())
             {
                 delete bunny;
@@ -343,13 +336,13 @@ public:
             Position player_pos{player.get_row(), player.get_column()};
             bunny -> run_away(player_pos);
 
-            //Delete bunny if it ran off the map
+            //Delete bunny if it runs off the map
             if(!bunny -> is_alive())
             {
                 delete bunny;
                 bunny = nullptr;
 
-                //Try spawning a new bunny immediately
+                //try spawning a new bunny
                 maybe_spawn_bunny(player);
             }
         }
@@ -387,6 +380,7 @@ public:
         bunny_spawn_chance_percent = std::max(0, std::min(100, percent));
     }
 
+    //data for how long it takes to sprout
     int days_to_sprout(char seed)
     {
         switch (seed)
@@ -406,6 +400,7 @@ public:
         }
     }
 
+    //data for how long it takes to mature
     int days_to_mature(char sprout)
     {
         switch (sprout)

@@ -1,6 +1,4 @@
 #pragma once
-#ifndef BUNNY_HPP
-#define BUNNY_HPP
 
 struct Position {
     int row;
@@ -58,5 +56,3 @@ public:
         scared = false; // reset scared state after running
     }
 };
-
-#endif

@@ -12,11 +12,26 @@ private:
 public:
     Player() : row(0), column(0) {}
 
-    Inventory& get_inventory() { return inventory; }
-    const Inventory& get_inventory() const { return inventory; }
+    Inventory& get_inventory()
+    {
+        return inventory;
+    }
 
-    int get_row() const { return row; }
-    int get_column() const { return column; }
+    const Inventory& get_inventory() const
+    {
+        return inventory;
+    }
+
+    int get_row() const
+    {
+        return row;
+    }
+
+    int get_column() const
+    {
+        return column;
+    }
+
 
     void set_position(int new_row, int new_column)
     {
@@ -44,9 +59,25 @@ public:
             return;
         }
 
-        if (row < 0) row = 0;
-        if (column < 0) column = 0;
-        if (row >= max_rows) row = max_rows - 1;
-        if (column >= max_columns) column = max_columns - 1;
+        //keep player inbounds
+        if (row < 0)
+        {
+            row = 0;
+        }
+
+        if (column < 0)
+        {
+            column = 0;
+        }
+
+        if (row >= max_rows)
+        {
+            row = max_rows - 1;
+        }
+
+        if (column >= max_columns)
+        {
+            column = max_columns - 1;
+        }
     }
 };
