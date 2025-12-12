@@ -22,7 +22,7 @@ int main()
 
     while (running)
     {
-        // Start-of-day updates: spawn bunny & bunny eats plant if on one
+        //spawn bunny & bunny eats plant if on one
         farm.start_of_day_updates(player);
 
         clear_screen();
@@ -47,6 +47,7 @@ int main()
 
         switch (input)
         {
+            //quit game
             case 'q': case 'Q':
             {
                 running = false;
@@ -65,20 +66,47 @@ int main()
                 break;
             }
 
-            case 'c': case 'C': farm.plant_carrot(player); break;
-            case 'l': case 'L': farm.plant_lettuce(player); break;
-            case 'e': case 'E': farm.plant_spinach(player); break;
-            case 'b': case 'B': farm.plant_beet(player); break;
-            case 'p': case 'P': farm.plant_brussel_sprouts(player); break;
-            case 'h': case 'H': farm.harvest_crop(player); break;
-            case 'r': case 'R': farm.water_crop(player); break;
-            case 'f': case 'F': farm.fertilize_tile(player); break;
+            //planting
+            case 'c': case 'C':
+                farm.plant_carrot(player);
+                break;
 
+            case 'l': case 'L':
+                farm.plant_lettuce(player);
+                break;
+
+            case 'e': case 'E':
+                farm.plant_spinach(player);
+                break;
+
+            case 'b': case 'B':
+                farm.plant_beet(player);
+                break;
+
+            case 'p': case 'P':
+                farm.plant_brussel_sprouts(player);
+                break;
+
+            //crop actions
+            case 'h': case 'H':
+                farm.harvest_crop(player);
+                break;
+
+            case 'r': case 'R':
+                farm.water_crop(player);
+                break;
+
+            case 'f': case 'F':
+                farm.fertilize_tile(player);
+                break;
+
+            //movement
             case 'w': case 'a': case 's': case 'd':
             case 'W': case 'A': case 'S': case 'D':
                 player.move(input, farm.get_rows(), farm.get_columns());
                 steps++;
-                // Check if bunny should be scared after player move
+
+                //check if bunny should be scared after movement when player stands next to bunny
                 farm.update_bunny_after_player_move(player);
                 break;
 
@@ -87,17 +115,14 @@ int main()
                 break;
         }
 
-        // End of day after 10 moves
+
+        //end of day after 10 moves
         if (steps >= 10)
         {
             std::cout << "\nDay " << day << " has ended!\n";
 
-            // Grow crops
             farm.grow_crops();
-
-            // Bunny moves at end of day
             farm.move_bunny_end_of_day(player);
-
 
             steps = 0;
             day++;
@@ -105,7 +130,7 @@ int main()
             std::cout << "Your crops have grown.\n\n";
             std::cout << "Press ENTER to continue...";
             std::string tmp;
-            std::getline(std::cin, tmp); // flush newline left by >> input
+            std::getline(std::cin, tmp); // flush newline
             std::getline(std::cin, tmp);
         }
     }
