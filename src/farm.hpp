@@ -27,7 +27,6 @@ private:
 public:
 
     //for fertilize_test.cpp
-    std::vector<std::vector<char>>& debug_grid() { return grid; }
     std::vector<std::vector<int>>& debug_fertilizer() { return fertilizer; }
     std::vector<std::vector<int>>& debug_growth() { return growth; }
 
